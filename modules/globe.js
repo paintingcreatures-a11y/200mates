@@ -135,7 +135,6 @@ function renderMarkers(mates) {
       if (photoUrl) {
         const img = document.createElement("img");
         img.src = photoUrl;
-       // img.style.cssText = "width:160px;height:110px;object-fit:cover;display:block;";
         img.style.cssText = "width:160px;max-height:120px;object-fit:contain;display:block;background:#000;";
         img.onerror = () => img.style.display = "none";
         card.appendChild(img);
