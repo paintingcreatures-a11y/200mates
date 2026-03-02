@@ -41,6 +41,7 @@ document.getElementById("mateForm").addEventListener("submit", async e => {
   const photo       = document.getElementById("photo").files[0];
   let lat           = parseFloat(document.getElementById("lat").value);
   let lng           = parseFloat(document.getElementById("lng").value);
+
   let countryCode   = document.getElementById("countryCode").value;
 
   if (!name || !country || !brand || !photo) { alert(t("alertRequired")); return; }
@@ -49,7 +50,9 @@ document.getElementById("mateForm").addEventListener("submit", async e => {
     const iso3 = selectedIso3;
     countryCode = iso3;
     const cap = capitalCoords[iso3];
+
     if (cap) { lat = cap.lat; lng = cap.lng; }
+
   } else if (isNaN(lat) || isNaN(lng)) {
     const iso3 = countryCode || nameToIso3[country.toLowerCase().trim()];
     if (iso3) {
@@ -85,8 +88,6 @@ document.getElementById("mateForm").addEventListener("submit", async e => {
     }]);
     if (ie) throw ie;
 
-    selectedIso3 = null;
-
     if (!isNaN(lat) && !isNaN(lng)) {
       clearTimeout(rotateTimer);
       isZoomed = true;
@@ -94,15 +95,33 @@ document.getElementById("mateForm").addEventListener("submit", async e => {
       globe.controls().autoRotate = false;
       globe.pointOfView({ lat, lng, altitude: 0.8 }, 1500);
       setTimeout(() => { isProgrammaticMove = false; }, 1600);
+      setTimeout(() => {
+        isProgrammaticMove = true;
+        globe.pointOfView({ lat: 20, lng: -20, altitude: 2.5 }, 1500);
+        setTimeout(() => {
+          isProgrammaticMove = false;
+          isZoomed = false;
+          globe.controls().autoRotate = true;
+        }, 1600);
+      }, 4000);
+      setTimeout(() => { selectedIso3 = null; renderPolygons(); }, 5700);
     }
 
-    showSuccessModal();
+      showSuccessModal();
+      e.target.reset();
+      document.getElementById("photoPreview").style.display = "none";
+      document.getElementById("fileDropInner").style.display = "flex";
+      document.getElementById("gpsStatus").textContent = t("gpsRequesting");
+      document.getElementById("gpsStatus").style.color = "";
+      document.getElementById("gpsStatus").style.borderColor = "";
+      document.getElementById("country").value = "";
+      document.getElementById("country").style.background = "";
+      document.getElementById("country").style.borderColor = "";
+      document.getElementById("lat").value = "";
+      document.getElementById("lng").value = "";
+      document.getElementById("countryCode").value = "";
+      initGPS();
 
-    e.target.reset();
-    document.getElementById("photoPreview").style.display = "none";
-    document.getElementById("fileDropInner").style.display = "flex";
-    document.getElementById("gpsStatus").textContent = t("gpsRequesting");
-    initGPS();
   } catch (err) {
     console.error(err);
     alert(`${t("alertError")}${err.message}`);
