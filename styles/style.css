@@ -776,3 +776,30 @@ h1 {
   .emoji-big { font-size: 22px; }
   .lang-btn { font-size: 10px; padding: 2px 4px; }
 }
+
+
+/* INSTAGRAM BUTTON ──────────────────────────────────────────*/
+.ig-btn {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--dark-3);
+  border: 1px solid var(--border);
+  border-radius: 9px; padding: 8px 14px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-family: var(--font);
+  font-size: 13px; font-weight: 500;
+  transition: color .18s, border-color .18s, background .18s;
+  white-space: nowrap;
+}
+.ig-btn i { font-size: 16px; }
+.ig-btn:hover {
+  color: white;
+  border-color: #7a9e52;
+  background: 484840;
+}
+
+/* En mobile: ocultar el texto, solo mostrar el ícono */
+@media (max-width: 768px) {
+  .ig-label { display: none; }
+  .ig-btn { padding: 8px 10px; border-radius: 8px; }
+}
